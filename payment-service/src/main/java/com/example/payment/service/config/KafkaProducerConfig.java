@@ -1,0 +1,45 @@
+package com.example.payment.service.config;
+
+import com.example.payment.service.config.utils.OrderRequestSerializer;
+import com.example.payment.service.dto.OrderRequest;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Configuration
+public class KafkaProducerConfig {
+
+    @Bean
+    public KafkaTemplate<String, OrderRequest> orderRequestKafkaTemplate() {
+        return new KafkaTemplate<>(orderRequestProducerFactory());
+    }
+
+    @Bean
+    public DefaultKafkaProducerFactory<String, OrderRequest> orderRequestProducerFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, OrderRequestSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean
+    public KafkaTemplate<String, String> stringKafkaTemplate() {
+        return new KafkaTemplate<>(stringProducerFactory());
+    }
+
+    @Bean
+    public DefaultKafkaProducerFactory<String, String> stringProducerFactory() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+}

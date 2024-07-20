@@ -1,0 +1,89 @@
+spring:
+  application:
+    name: logistic-gateway
+  cloud:
+    gateway:
+      discovery:
+       locator:
+         enabled: true
+         lower-case-service-id: true
+      routes:
+        - id: logistic-order-service
+          uri: http://logistic-order-service:8082
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - StripPrefix=1
+
+        - id: logistic-auth-service
+          uri: http://logistic-auth-service:8084
+          predicates:
+            - Path=/api/auth/**
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=1
+
+        - id: logistic-payment-service
+          uri: http://logistic-payment-service:8085
+          predicates:
+            - Path=/api/payment/**
+          filters:
+            - StripPrefix=1
+
+        - id: logistic-inventory-service
+          uri: http://logistic-inventory-service:8086
+          predicates:
+            - Path=/api/inventory/**
+          filters:
+            - StripPrefix=1
+
+        - id: logistic-delivery-service
+          uri: http://logistic-delivery-service:8087
+          predicates:
+            - Path=/api/delivery/**
+          filters:
+            - StripPrefix=1
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://logistic-keycloak:8080/realms/master
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://logistic-eureka:8761/eureka/
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - gateway
+          - health
+          - info
+          - routes
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+server:
+  port: 8083
+
+keycloak:
+  server-url: http://logistic-keycloak:8080/admin/master/console/
+  realm: master
+  username: admin
+  password: 1234
+  client-id: logistic-order-service
+  clientSecret: ZCcFJgZ3gxh5RxHj9B1yvegib0IJBaE1

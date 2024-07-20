@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: logistic-inventory-service
+  datasource:
+    url: jdbc:postgresql://postgres-inventory-service:5432/inventory-service
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://logistic-eureka:8761/eureka/
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+server:
+  port: 8086

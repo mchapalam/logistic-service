@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: logistic-auth-service
+  datasource:
+    url: jdbc:postgresql://logistic-user-service-postgres:5432/logistic_auth
+    username: auth_user
+    password: auth_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://logistic-keycloak:8080/realms/master
+
+server:
+  port: 8084
+
+keycloak:
+  server-url: http://logistic-keycloak:8080/admin/master/console/
+  realm: master
+  username: admin
+  password: 1234
+  client-id: logistic-order-service
+  clientSecret: ZCcFJgZ3gxh5RxHj9B1yvegib0IJBaE1
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://logistic-eureka:8761/eureka/
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

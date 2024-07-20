@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'logistic'
+    static_configs:
+      - targets: ['logistic-auth-service:8084', 'logistic-order-service:8082', 'logistic-delivery-service:8087', 'logistic-inventory-service:8086', 'logistic-payment-service:8085']
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']

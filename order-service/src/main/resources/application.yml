@@ -1,0 +1,34 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: logistic-order-service
+  datasource:
+    url: jdbc:postgresql://postgres-order-service:5432/order-service
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://logistic-keycloak:8080/realms/master
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://logistic-eureka:8761/eureka/
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
